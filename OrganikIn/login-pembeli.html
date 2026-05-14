@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login SPPG - OrganikIn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #f0f9f0 0%, #dcfce7 100%);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      height: 85vh;
+      max-height: 650px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* LANDSCAPE FULL WIDTH */
+    @media (orientation: landscape) {
+      .login-container {
+        width: 95vw;
+        height: 90vh;
+        flex-direction: row;
+        max-width: none;
+        border-radius: 0;
+      }
+      
+      .top-section {
+        width: 45%;
+        flex-direction: column;
+        padding: 50px;
+      }
+      
+      .form-section {
+        width: 55%;
+        padding: 50px;
+      }
+      
+      .top-section h1 {
+        font-size: 2.5rem;
+      }
+      
+      .form-section h2 {
+        font-size: 1.8rem;
+      }
+    }
+
+    .top-section {
+      background: linear-gradient(135deg, #16b364 0%, #15803d 100%);
+      color: white;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .top-section h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .top-section p {
+      font-size: 1rem;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .badge {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-size: 13px;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #fafafa;
+    }
+
+    .form-section h2 {
+      color: #16b364;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .form-section p {
+      color: #64748b;
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 14px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 52px;
+      padding: 0 18px 0 50px;
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      font-size: 15px;
+      background: white;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: #16b364;
+      box-shadow: 0 0 0 3px rgba(22,179,100,0.1);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
+
+    .input-field:focus + .input-icon {
+      color: #16b364;
+    }
+
+    .forgot {
+      text-align: right;
+      margin-bottom: 28px;
+    }
+
+    .forgot a {
+      color: #f59e0b;
+      font-size: 14px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .forgot a:hover {
+      color: #d97706;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(245,158,11,0.3);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #9ca3af;
+      font-size: 14px;
+      margin: 20px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .social-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: white;
+      border: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .social-btn.facebook:hover {
+      background: #1877f2;
+      color: white;
+      border-color: #1877f2;
+    }
+
+    .social-btn.google:hover {
+      border-color: #ea4335;
+      color: #ea4335;
+    }
+
+    .social-btn.apple:hover {
+      background: #000;
+      color: white;
+      border-color: #000;
+    }
+
+    .signup-row {
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .signup-link {
+      color: #f59e0b;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+
+    .signup-link:hover {
+      color: #16b364;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Top Section -->
+    <div class="top-section">
+      <div class="badge">
+        🛒 Petani
+      </div>
+      <h1>Selamat Datang</h1>
+      <p>Masuk ke dashboard OrganikIn Anda</p>
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-section">
+      <h2>Login</h2>
+      <p>Silakan masukkan email dan kata sandi</p>
+
+      <!-- Email -->
+      <div class="input-group">
+        <input type="email" class="input-field" placeholder="Email" required>
+        <i class="fas fa-envelope input-icon"></i>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <input type="password" class="input-field" placeholder="Password" required>
+        <i class="fas fa-lock input-icon"></i>
+      </div>
+
+      <div class="forgot">
+        <a href="#">Lupa password?</a>
+      </div>
+
+      <button class="login-btn" onclick="doLogin()">
+        Masuk
+      </button>
+
+      <div class="divider">atau masuk dengan</div>
+
+      <div class="social-buttons">
+        <div class="social-btn facebook" title="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </div>
+        <div class="social-btn google" title="Google">
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="social-btn apple" title="Apple">
+          <i class="fab fa-apple"></i>
+        </div>
+      </div>
+
+      <div class="signup-row">
+        Belum punya akun? 
+         <span class="signup-link" onclick="goRegister()">
+       Daftar
+       </span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+  function doLogin(){
+
+    const email = document.querySelector('input[type="email"]').value;
+
+    const password = document.querySelector('input[type="password"]').value;
+
+    if(!email || !password){
+
+      alert('⚠️ Isi email dan password');
+
+      return;
+    }
+
+
+    window.location.href = "dashboard-pembeli.html";
+
+  }
+
+  // KE HALAMAN DAFTAR
+  function goRegister(){
+
+    window.location.href = "daftar-pembeli.html";
+
+  }
+
+</script>
+</body>
+</html>

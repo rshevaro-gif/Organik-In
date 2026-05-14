@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Pengelola - OrganikIn</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Inter',sans-serif;
+    }
+
+    body{
+      background:#f5f7fb;
+      color:#1e293b;
+      display:flex;
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+      width:260px;
+      height:100vh;
+      background:#16b364;
+      position:fixed;
+      left:0;
+      top:0;
+      padding:30px 20px;
+      color:white;
+    }
+
+    .logo{
+      font-size:30px;
+      font-weight:700;
+      margin-bottom:40px;
+    }
+
+    .menu{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .menu button{
+      border:none;
+      background:none;
+      color:white;
+      padding:14px 16px;
+      border-radius:14px;
+      cursor:pointer;
+      text-align:left;
+      transition:0.3s;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:15px;
+    }
+
+    .menu button:hover{
+      background:rgba(255,255,255,0.15);
+    }
+
+    .active{
+      background:#15803d !important;
+      color:white !important;
+      font-weight:600;
+    }
+
+    /* MAIN */
+    .main{
+      margin-left:260px;
+      width:100%;
+      padding:35px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:30px;
+    }
+
+    .topbar h1{
+      color:#16b364;
+      font-size:32px;
+    }
+
+    .profile{
+      background:white;
+      padding:12px 18px;
+      border-radius:14px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.06);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .profile:hover{
+      box-shadow:0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    /* CARDS */
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:22px;
+      margin-bottom:28px;
+    }
+
+    .card{
+      background:white;
+      border-radius:22px;
+      padding:24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+      transition:0.3s;
+      cursor:pointer;
+      border-top:4px solid #16b364;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .card i{
+      font-size:32px;
+      color:#16b364;
+      margin-bottom:14px;
+    }
+
+    .card h2{
+      font-size:28px;
+      margin-bottom:8px;
+      color:#1e293b;
+    }
+
+    .card p{
+      color:#64748b;
+      font-size:14px;
+    }
+
+    /* SECTION */
+    .section{
+      background:white;
+      border-radius:24px;
+      padding:28px;
+      margin-bottom:28px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .section-title{
+      font-size:22px;
+      margin-bottom:20px;
+      color:#16b364;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    /* TABLE */
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-bottom:20px;
+    }
+
+    table th{
+      background:#f1f5f9;
+      padding:14px;
+      text-align:left;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    table td{
+      padding:14px;
+      border-bottom:1px solid #e2e8f0;
+      font-size:14px;
+    }
+
+    /* STATUS */
+    .status{
+      padding:6px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .pending{
+      background:#fef3c7;
+      color:#d97706;
+    }
+
+    .done{
+      background:#dcfce7;
+      color:#15803d;
+    }
+
+    .process{
+      background:#dbeafe;
+      color:#1d4ed8;
+    }
+
+    /* BUTTON */
+    .btn{
+      border:none;
+      background:#16b364;
+      color:white;
+      padding:14px 20px;
+      border-radius:14px;
+      cursor:pointer;
+      font-size:15px;
+      font-weight:600;
+      transition:0.3s;
+      box-shadow:0 4px 15px rgba(22,179,100,0.3);
+    }
+
+    .btn:hover{
+      background:#15803d;
+      transform:translateY(-2px);
+      box-shadow:0 6px 20px rgba(21,128,61,0.4);
+    }
+
+    .btn-secondary{
+      background:#6b7280;
+      box-shadow:0 4px 15px rgba(107,114,128,0.3);
+    }
+
+    .btn-secondary:hover{
+      background:#4b5563;
+    }
+
+    /* CHAT */
+    .chat-box{
+      height:280px;
+      background:#f8fafc;
+      border-radius:16px;
+      padding:18px;
+      overflow-y:auto;
+      margin-bottom:18px;
+      border:2px solid #e2e8f0;
+    }
+
+    .message{
+      padding:12px 16px;
+      border-radius:14px;
+      margin-bottom:14px;
+      max-width:80%;
+      font-size:14px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .admin{
+      background:#dcfce7;
+      margin-left:auto;
+      border-bottom-right-radius:6px;
+    }
+
+    .user{
+      background:#16b364;
+      color:white;
+      margin-right:auto;
+      border-bottom-left-radius:6px;
+    }
+
+    .chat-input{
+      display:flex;
+      gap:12px;
+    }
+
+    .chat-input input{
+      flex:1;
+      padding:14px;
+      border-radius:14px;
+      border:2px solid #e2e8f0;
+      outline:none;
+      transition:0.3s;
+      font-size:15px;
+    }
+
+    .chat-input input:focus{
+      border-color:#16b364;
+      box-shadow:0 0 0 3px rgba(22,179,100,0.1);
+    }
+
+    /* MAP */
+    .map-container{
+      height:400px;
+      background:#e5e7eb;
+      border-radius:16px;
+      overflow:hidden;
+      margin-bottom:20px;
+      position:relative;
+      border:3px solid #f1f5f9;
+    }
+
+    .map-placeholder{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      color:#15803d;
+      text-align:center;
+      padding:20px;
+    }
+
+    .map-placeholder i{
+      font-size:48px;
+      margin-bottom:16px;
+      opacity:0.8;
+    }
+
+    .map-marker{
+      position:absolute;
+      top:20%;
+      left:15%;
+      background:#16b364;
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-size:16px;
+      box-shadow:0 4px 20px rgba(22,179,100,0.5);
+      animation:pulse 2s infinite;
+    }
+
+    @keyframes pulse{
+      0% { transform:scale(1); box-shadow:0 0 0 0 rgba(22,179,100,0.7); }
+      70% { transform:scale(1.1); box-shadow:0 0 0 20px rgba(22,179,100,0); }
+      100% { transform:scale(1); box-shadow:0 0 0 0 rgba(22,179,100,0); }
+    }
+
+    /* PROMOSI */
+    .promo-section{
+      background:linear-gradient(135deg, #16b364 0%, #15803d 100%);
+      color:white;
+      border-radius:24px;
+      padding:28px;
+      margin-bottom:28px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .promo-section::before{
+      content:'';
+      position:absolute;
+      top:-50%;
+      right:-50%;
+      width:200%;
+      height:200%;
+      background:radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation:rotate 20s linear infinite;
+    }
+
+    @keyframes rotate{
+      0% { transform:rotate(0deg); }
+      100% { transform:rotate(360deg); }
+    }
+
+    .promo-content{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:1fr 2fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .promo-text h3{
+      font-size:24px;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .promo-text p{
+      font-size:15px;
+      opacity:0.9;
+      line-height:1.6;
+    }
+
+    .promo-products{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:16px;
+    }
+
+    .product-card{
+      background:rgba(255,255,255,0.2);
+      backdrop-filter:blur(10px);
+      padding:16px;
+      border-radius:16px;
+      text-align:center;
+      transition:0.3s;
+      border:1px solid rgba(255,255,255,0.2);
+    }
+
+    .product-card:hover{
+      transform:translateY(-4px);
+      background:rgba(255,255,255,0.3);
+    }
+
+    .product-icon{
+      font-size:28px;
+      margin-bottom:8px;
+    }
+
+    .product-name{
+      font-weight:600;
+      font-size:14px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      body{
+        flex-direction:column;
+      }
+      .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+      }
+      .menu{
+        flex-direction:row;
+        overflow:auto;
+      }
+      .main{
+        margin-left:0;
+        padding:20px;
+      }
+      .promo-content{
+        grid-template-columns:1fr;
+        text-align:center;
+        gap:20px;
+      }
+      .map-container{
+        height:300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">
+      OrganikIn
+    </div>
+    <div class="menu">
+      <button class="active" onclick="scrollToSection('dashboard')">
+        <i class="fas fa-chart-line"></i>
+        Dashboard
+      </button>
+      <button onclick="scrollToSection('permintaan')">
+        <i class="fas fa-truck"></i>
+        Permintaan
+      </button>
+      <button onclick="scrollToSection('peta')">
+        <i class="fas fa-map-marker-alt"></i>
+        Peta Terdekat
+      </button>
+      <button onclick="scrollToSection('olah')">
+        <i class="fas fa-recycle"></i>
+        Pengolahan
+      </button>
+      <button onclick="scrollToSection('promo')">
+        <i class="fas fa-star"></i>
+        Promosi
+      </button>
+      <button onclick="scrollToSection('chat')">
+        <i class="fas fa-comments"></i>
+        Chat
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <h1>Dashboard Pengelola</h1>
+      <div class="profile" onclick="showProfile()">
+        <i class="fas fa-user-circle"></i>
+        Pengelola Organik
+      </div>
+    </div>
+
+    <!-- PROMO SECTION -->
+    <div class="section promo-section" id="promo">
+      <div class="promo-content">
+        <div class="promo-text">
+          <h3>🚀 Promosi Produk Unggulan</h3>
+          <p>Tingkatkan penjualan dengan produk organik berkualitas tinggi kami. Siap kirim ke seluruh SPPG!</p>
+        </div>
+        <div class="promo-products">
+          <div class="product-card">
+            <div class="product-icon">🌱</div>
+            <div class="product-name">Kompos Premium</div>
+          </div>
+          <div class="product-card">
+            <div class="product-icon">🐛</div>
+            <div class="product-name">Vermikompos</div>
+          </div>
+          <div class="product-card">
+            <div class="product-icon">🍵</div>
+            <div class="product-name">Pupuk Cair Organik</div>
+          </div>
+          <div class="product-card">
+            <div class="product-icon">🌿</div>
+            <div class="product-name">Biomassa</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARDS -->
+    <div class="cards" id="dashboard">
+      <div class="card">
+        <i class="fas fa-trash"></i>
+        <h2 id="totalMasuk">120</h2>
+        <p>Kg Limbah Masuk</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-recycle"></i>
+        <h2>80</h2>
+        <p>Kg Limbah Diproses</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-truck"></i>
+        <h2>7</h2>
+        <p>Permintaan Penjemputan</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-map-marker-alt"></i>
+        <h2>15</h2>
+        <p>SPPG Terdekat</p>
+      </div>
+    </div>
+
+    <!-- MAP TERDEKAT -->
+    <div class="section" id="peta">
+      <div class="section-title">
+        <span>Peta Lokasi SPPG Terdekat</span>
+        <button class="btn btn-secondary" onclick="refreshMap()">🔄 Refresh</button>
+      </div>
+      <div class="map-container">
+        <div class="map-marker" title="SPPG Surakarta">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="map-placeholder">
+          <i class="fas fa-map-marked-alt"></i>
+          <h3>SPPG Terdekat</h3>
+          <p>Klik marker untuk detail lokasi<br>
+          <small>SPPG Surakarta - 2.5 km</small></p>
+          <button class="btn" style="margin-top:16px; padding:10px 20px; font-size:14px;" onclick="openGoogleMaps()">
+            Buka Google Maps
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERMINTAAN -->
+    <div class="section" id="permintaan">
+      <div class="section-title">
+        Permintaan Penjemputan
+        <button class="btn btn-secondary" onclick="addRandomRequest()">+ Tambah Random</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>SPPG</th>
+            <th>Jenis</th>
+            <th>Berat</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="requestTable">
+          <tr>
+            <td>SPPG Semarang</td>
+            <td>Sisa Makanan</td>
+            <td>20 Kg</td>
+            <td><span class="status pending">Menunggu</span></td>
+            <td><button class="btn btn-secondary" style="padding:8px 12px; font-size:12px;" onclick="acceptRequest(this)">Terima</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PENGOLAHAN -->
+    <div class="section" id="olah">
+      <div class="section-title">Tambah Data Pengolahan</div>
+      <div style="margin-bottom:18px;">
+        <input type="text" id="hasil" placeholder="Contoh: Kompos Organik" style="width:100%; padding:14px; border-radius:14px; border:2px solid #e2e8f0; outline:none; font-size:15px;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <input type="number" id="berat" placeholder="Berat Hasil (Kg)" style="width:100%; padding:14px; border-radius:14px; border:2px solid #e2e8f0; outline:none; font-size:15px;">
+      </div>
+      <button class="btn" onclick="tambahPengolahan()">Simpan Pengolahan</button>
+      <div id="hasilData" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="section" id="chat">
+      <div class="section-title">Chat SPPG</div>
+      <div class="chat-box" id="chatBox">
+        <div class="message user">
+          Kapan limbah dijemput?
+        </div>
+        <div class="message admin">
+          Penjemputan dijadwalkan besok pukul 08:00
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Ketik balasan..." onkeypress="handleEnter(event)">
+        <button class="btn" onclick="sendMessage()">Kirim</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let pengolahanData = JSON.parse(localStorage.getItem('pengolahanData')) || [];
+    let permintaanData = JSON.parse(localStorage.getItem('permintaanData')) || [];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadData();
+      renderPengolahan();
+      renderPermintaan();
+    });
+
+    function scrollToSection(id){
+      document.getElementById(id).scrollIntoView({ behavior:'smooth' });
+    }
+
+    function showProfile(){
+      alert('Profile Pengelola Organik\nFitur lengkap sudah tersedia!');
+    }
+
+    function acceptRequest(button) {
+      const row = button.closest('tr');
+      const statusCell = row.cells[3];
+      const status = statusCell.querySelector('.status');
+      
+      status.textContent = 'Diproses';
+      status.className = 'status process';
+      button.textContent = 'Selesai';
+      button.style.background = '#15803d';
+      
+      showNotification('Permintaan diterima!', 'success');
+    }
+
+    function addRandomRequest() {
+      const sppglist = ['SPPG Semarang', 'SPPG Solo', 'SPPG Yogyakarta', 'SPPG Magelang', 'SPPG Klaten'];
+      const jenislist = ['Sisa Makanan', 'Sayur & Buah', 'Daun & Ranting', 'Kertas Organik'];
+      
+      const row = document.getElementById('requestTable').insertRow(0);
+      row.innerHTML = `
+        <td>${sppglist[Math.floor(Math.random()*sppglist.length)]}</td>
+        <td>${jenislist[Math.floor(Math.random()*jenislist.length)]}</td>
+        <td>${(Math.random()*50 + 5).toFixed(1)} Kg</td>
+        <td><span class="status pending">Menunggu</span></td>
+        <td><button class="btn btn-secondary" style="padding:8px 12px; font-size:12px;" onclick="acceptRequest(this)">Terima</button></td>
+      `;
+      
+      showNotification('Permintaan baru ditambahkan!', 'success');
+    }
+
+    function tambahPengolahan(){
+      const hasil = document.getElementById('hasil').value;
+      const berat = document.getElementById('berat').value;
+
+      if(hasil === '' || berat === ''){
+        showNotification('Lengkapi data terlebih dahulu!', 'error');
+        return;
+      }
+
+      const data = {
+        id: Date.now(),
+        hasil: hasil,
+        berat: berat,
+        tanggal: new Date().toLocaleDateString('id-ID')
+      };
+
+      pengolahanData.unshift(data);
+      localStorage.setItem('pengolahanData', JSON.stringify(pengolahanData));
+      
+      renderPengolahan();
+      
+      document.getElementById('hasil').value = '';
+      document.getElementById('berat').value = '';
+      
+      showNotification('Data pengolahan berhasil disimpan!', 'success');
+    }
+
+    function renderPengolahan() {
+      const container = document.getElementById('hasilData');
+      container.innerHTML = pengolahanData.map(item => `
+        <div style="background:#f0fdfa; padding:16px; border-radius:14px; margin-top:12px; border-left:4px solid #16b364;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <b>${item.hasil}</b>
+            <span style="background:#dcfce7; color:#15803d; padding:4px 12px; border-radius:20px; font-size:13px;">${item.tanggal}</span>
+          </div>
+          <div style="color:#64748b; font-size:14px; margin-top:4px;">
+            Berat: <strong>${item.berat} Kg</strong>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderPermintaan() {
+      // Data sudah ada di HTML, bisa ditambahkan logic lebih lanjut
+    }
+
+    function sendMessage(){
+      const input = document.getElementById('chatInput');
+      if(input.value.trim() === '') return;
+
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML += `
+        <div class="message admin">${input.value}</div>
+      `;
+      
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleEnter(event) {
+      if(event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function openGoogleMaps() {
+      window.open('https://maps.google.com/?q=SPPG+Surakarta', '_blank');
+    }
+
+    function refreshMap() {
+      showNotification('Peta diperbarui!', 'success');
+    }
+
+    function loadData() {
+      if(pengolahanData.length === 0) {
+        pengolahanData = [
+          {id:1, hasil:'Kompos Organik Premium', berat:'45', tanggal:'12 Mei 2026'},
+          {id:2, hasil:'Vermikompos', berat:'23', tanggal:'10 Mei 2026'}
+        ];
+        localStorage.setItem('pengolahanData', JSON.stringify(pengolahanData));
+      }
+    }
+
+    function showNotification(message, type = 'success') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position:fixed;
+        top:20px;
+        right:20px;
+        background:${type === 'success' ? '#16b364' : '#ef4444'};
+        color:white;
+        padding:16px 24px;
+        border-radius:12px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        z-index:1000;
+        transform:translateX(400px);
+        transition:0.3s;
+        font-weight:500;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+      setTimeout(() => notification.remove(), 3000);
+    }
+  </script>
+
+</body>
+</html>
